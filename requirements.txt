@@ -2,3 +2,9 @@ discord.py
 requests
 markdown
 dnspython
+aiohttp
+asyncio
+better-profanity
+psutil
+git+https://github.com/Rapptz/discord-ext-menus
+python-dotenv
