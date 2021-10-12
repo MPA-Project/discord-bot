@@ -1,37 +1,46 @@
-from discord import Forbidden
+from discord import Forbidden, Embed, Member
 from discord.ext.commands import Cog
 from discord.ext.commands import command
 
 from ..db import db
 
+welcome_channel = 896019708724264970
+
 
 class Welcome(Cog):
-	def __init__(self, bot):
-		self.bot = bot
+    def __init__(self, bot):
+        self.bot = bot
 
-	@Cog.listener()
-	async def on_ready(self):
-		if not self.bot.ready:
-			self.bot.cogs_ready.ready_up("welcome")
+    @Cog.listener()
+    async def on_ready(self):
+        if not self.bot.ready:
+            self.bot.cogs_ready.ready_up("welcome")
 
-	@Cog.listener()
-	async def on_member_join(self, member):
-		db.execute("INSERT INTO exp (UserID) VALUES (?)", member.id)
-		await self.bot.get_channel(896019708724264970).send(f"Welcome to **{member.guild.name}** {member.mention}!")
+    @Cog.listener()
+    async def on_member_join(self, member: Member):
+        db.execute("INSERT INTO exp (UserID) VALUES (?)", member.id)
 
-		try:
-			await member.send(f"Welcome to **{member.guild.name}**! Enjoy your stay!")
+        # embed = Embed(
+        #     title=f"Welcome to **{member.guild.name}** {member.mention}!",
+        # )
+        # embed.set_image(url=member.avatar_url)
+        await self.bot.get_channel(welcome_channel).send(
+            f"Welcome to **{member.guild.name}** {member.mention}!"
+        )
 
-		except Forbidden:
-			pass
+        try:
+            await member.send(f"Welcome to **{member.guild.name}**! Enjoy your stay!")
 
-		# await member.add_roles(member.guild.get_role(626609604813651979), member.guild.get_role(626609649294114857))
+        except Forbidden:
+            pass
 
-	@Cog.listener()
-	async def on_member_remove(self, member):
-		db.execute("DELETE FROM exp WHERE UserID = ?", member.id)
-		await self.bot.get_channel(896019708724264970).send(f"{member.display_name} has left {member.guild.name}.")
+    @Cog.listener()
+    async def on_member_remove(self, member: Member):
+        db.execute("DELETE FROM exp WHERE UserID = ?", member.id)
+        await self.bot.get_channel(welcome_channel).send(
+            f"{member.display_name} has left."
+        )
 
 
 def setup(bot):
-	bot.add_cog(Welcome(bot))
+    bot.add_cog(Welcome(bot))
