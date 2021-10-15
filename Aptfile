@@ -2,3 +2,4 @@ libglib2.0-0
 libglib2.0-dev
 libpng-dev
 librsvg2-bin
+libpoppler-glib8
