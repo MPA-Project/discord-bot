@@ -17,3 +17,4 @@ humanize
 PyNaCl
 wheel
 ffmpeg
+cffi
