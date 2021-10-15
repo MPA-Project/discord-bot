@@ -237,5 +237,8 @@ class Bot(BotBase):
             else:
                 await self.process_commands(message)
 
+    async def log(self, message: str) -> None:
+        await self.stdout.send(message)
+
 
 bot = Bot()

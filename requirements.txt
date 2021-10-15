@@ -1,11 +1,16 @@
-discord.py
+discord
+discord.py[voice]
 requests
 markdown
 dnspython
 aiohttp
+aiofiles
 asyncio
 better-profanity
 psutil
 git+https://github.com/Rapptz/discord-ext-menus
 python-dotenv
 apscheduler
+pyvips
+youtube-dl
+humanize
