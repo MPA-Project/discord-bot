@@ -2,6 +2,7 @@ from datetime import datetime
 
 from discord import Embed, Member, Message
 from discord.ext.commands import Cog
+from src.bot import OWNER_IDS
 
 assistant_log_channel = 563281419888099335
 
@@ -18,6 +19,9 @@ class Log(Cog):
 
     @Cog.listener()
     async def on_user_update(self, before: Member, after: Member):
+        if after.id in OWNER_IDS:
+            pass
+
         if before.name != after.name:
             embed = Embed(
                 title="Username change",
@@ -64,6 +68,9 @@ class Log(Cog):
 
     @Cog.listener()
     async def on_member_update(self, before: Member, after: Member):
+        if after.id in OWNER_IDS:
+            pass
+
         if before.display_name != after.display_name:
             embed = Embed(
                 title="Nickname change",
@@ -100,6 +107,9 @@ class Log(Cog):
 
     @Cog.listener()
     async def on_message_edit(self, before: Member, after: Member):
+        if after.author.id in OWNER_IDS:
+            pass
+
         if not after.author.bot:
             if before.content != after.content:
                 embed = Embed(
@@ -121,6 +131,9 @@ class Log(Cog):
 
     @Cog.listener()
     async def on_message_delete(self, message: Message):
+        if message.author.id in OWNER_IDS:
+            pass
+
         if not message.author.bot:
             embed = Embed(
                 title="Message deletion",

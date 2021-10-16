@@ -137,6 +137,7 @@ class Bot(BotBase):
         print("bot disconnected")
 
     async def on_error(self, err, *args, **kwargs):
+        print(f"error {args}")
         if err == "on_command_error":
             await args[0].send("Something went wrong.")
 
