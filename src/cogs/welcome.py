@@ -54,9 +54,9 @@ class Welcome(Cog):
                     await file.close()
                     temp_image = pyvips.Image.new_from_file(f"{filename}.svg", dpi=300)
                     temp_image.write_to_file(f"{filename}.png")
-                    await self.bot.get_channel(welcome_channel).send(
-                        file=File(f"{filename}.png")
-                    )
+                    # await self.bot.get_channel(welcome_channel).send(
+                    #     file=File(f"{filename}.png")
+                    # )
 
         try:
             await member.send(f"Welcome to **{member.guild.name}**! Enjoy your stay!")

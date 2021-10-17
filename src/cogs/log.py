@@ -19,8 +19,8 @@ class Log(Cog):
 
     @Cog.listener()
     async def on_user_update(self, before: Member, after: Member):
-        if after.id in OWNER_IDS:
-            pass
+        if str(after.id) in OWNER_IDS:
+            return
 
         if before.name != after.name:
             embed = Embed(
@@ -68,8 +68,8 @@ class Log(Cog):
 
     @Cog.listener()
     async def on_member_update(self, before: Member, after: Member):
-        if after.id in OWNER_IDS:
-            pass
+        if str(after.id) in OWNER_IDS:
+            return
 
         if before.display_name != after.display_name:
             embed = Embed(
@@ -107,8 +107,8 @@ class Log(Cog):
 
     @Cog.listener()
     async def on_message_edit(self, before: Member, after: Member):
-        if after.author.id in OWNER_IDS:
-            pass
+        if str(before.author.id) in OWNER_IDS:
+            return
 
         if not after.author.bot:
             if before.content != after.content:
@@ -131,8 +131,8 @@ class Log(Cog):
 
     @Cog.listener()
     async def on_message_delete(self, message: Message):
-        if message.author.id in OWNER_IDS:
-            pass
+        if str(message.author.id) in OWNER_IDS:
+            return
 
         if not message.author.bot:
             embed = Embed(
