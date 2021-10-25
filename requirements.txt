@@ -18,3 +18,4 @@ PyNaCl
 wheel
 ffmpeg
 cffi
+pillow

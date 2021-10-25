@@ -12,6 +12,7 @@ from discord.ext import commands
 import re
 import humanize
 import datetime
+from src.bot import IS_DEV, OWNER_IDS
 
 
 youtube_dl.utils.bug_reports_message = lambda: ""
@@ -444,6 +445,9 @@ class Music(commands.Cog):
         aliases=["mcurrent", "mplaying"],
     )
     async def _now(self, ctx: commands.Context):
+        voice = discord.utils.get(self.bot.voice_clients, guild=ctx.guild)
+        if voice is None:
+            return await ctx.send("There is not any music played.")
 
         await ctx.send(embed=ctx.voice_state.current.create_embed())
 
@@ -595,6 +599,11 @@ class Music(commands.Cog):
     @_join.before_invoke
     @_play.before_invoke
     async def ensure_voice_state(self, ctx: commands.Context):
+        if IS_DEV and str(ctx.author.id) not in OWNER_IDS:
+            raise commands.CommandError(
+                "You are not allowed to run this command during development mode."
+            )
+
         if not ctx.author.voice or not ctx.author.voice.channel:
             raise commands.CommandError("You are not connected to any voice channel.")
 

@@ -15,6 +15,7 @@ from discord.ext.commands import (
     BadArgument,
     MissingRequiredArgument,
     CommandOnCooldown,
+    CommandError,
 )
 from discord.ext.commands import when_mentioned_or, command, has_permissions
 
@@ -28,6 +29,8 @@ COGS = [
     for path in glob("./src/cogs/*.py")
 ]
 IGNORE_EXCEPTIONS = (CommandNotFound, BadArgument)
+
+IS_DEV = os.environ.get("MODE_DEV", False)
 
 
 def get_prefix(bot, message):
@@ -137,7 +140,6 @@ class Bot(BotBase):
         print("bot disconnected")
 
     async def on_error(self, err, *args, **kwargs):
-        print(f"error {args}")
         if err == "on_command_error":
             await args[0].send("Something went wrong.")
 
@@ -145,8 +147,13 @@ class Bot(BotBase):
         raise
 
     async def on_command_error(self, ctx, exc):
+        print(f"on_command_error:Ctx: {ctx}")
+        print(f"on_command_error:Exc: {exc}")
         if any([isinstance(exc, error) for error in IGNORE_EXCEPTIONS]):
             pass
+
+        elif isinstance(exc, CommandError):
+            await ctx.send(exc)
 
         elif isinstance(exc, MissingRequiredArgument):
             await ctx.send("One or more required arguments are missing.")
