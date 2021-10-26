@@ -1,10 +1,11 @@
 from discord.ext.commands import Cog, command
 from discord import Message, File
-from PIL import Image
-import requests
 import aiohttp
 import aiofiles
+import asyncio
 import os
+from PIL import Image
+from derpibooru import Search, sort
 
 
 class Pony(Cog):
@@ -14,7 +15,34 @@ class Pony(Cog):
 
     @command(name="pony", help="Show random pony images")
     async def pony(self, ctx: Message):
-        await ctx.reply(f"Still working on progress...")
+        for img in Search().sort_by(sort.RANDOM).limit(1):
+            try:
+                async with aiohttp.ClientSession() as session:
+                    async with session.get(img.full) as resp:
+                        if resp.status != 200:
+                            print(f"resp not 200 {resp}")
+                            pass
+                        else:
+                            filename = f"./temp/pony-{ctx.author.id}"
+                            file = await aiofiles.open(f"{filename}_temp", mode="wb")
+                            await file.write(await resp.read())
+                            await file.close()
+
+                            im = Image.open(f"{filename}_temp")
+                            rgb_im = im.convert("RGB")
+                            rgb_im.save(f"{filename}.jpg")
+
+                            await ctx.reply(f"Source: {img.url}")
+                            await ctx.send(file=File(f"{filename}.jpg"))
+
+                            if os.path.isfile(f"{filename}.jpg"):
+                                os.remove(f"{filename}.jpg")
+                            if os.path.isfile(f"{filename}_temp"):
+                                os.remove(f"{filename}_temp")
+            except Exception as ex:
+                print(f"err {ex}")
+                await ctx.reply(f"Something went wrong, try again leter")
+                pass
 
     @command(name="ponywall", help="Show random pony wallpaper images")
     async def ponywall(self, ctx: Message):
