@@ -8,7 +8,7 @@ class Hi(Cog):
         super().__init__()
         self.bot = bot
 
-    @command(name="hello", aliases=["hi"])
+    @command(name="hello", aliases=["hi"], help="Say hi")
     async def hello(self, ctx: Message):
         await ctx.send(
             f"{choice(('Hello', 'Hi', 'Hey', 'Hiya'))} {ctx.author.mention}!"

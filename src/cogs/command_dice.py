@@ -8,7 +8,7 @@ class Dice(Cog):
         super().__init__()
         self.bot = bot
 
-    @command(name="dice", aliases=["roll"])
+    @command(name="dice", aliases=["roll"], help="Hmmm IDK why I built this :3")
     @cooldown(1, 60, BucketType.user)
     async def dice(self, ctx: Message, die_string: str):
         try:

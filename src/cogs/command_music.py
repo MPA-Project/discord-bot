@@ -18,6 +18,7 @@ from src.bot import ROLE_STAFF, OWNER_IDS
 youtube_dl.utils.bug_reports_message = lambda: ""
 
 ALLOWED_CHANNEL = [902205509669629993]
+ALLOWED_VOICE_CHANNEL = [898562636780830783, 902202756058734702, 902202792129728532]
 
 
 class VoiceError(Exception):
@@ -333,11 +334,6 @@ class Music(commands.Cog):
                 "This command can't be used in DM channels."
             )
 
-        # print(f"AuthorIdAllowed: {OWNER_IDS}")
-        # print(f"AuthorId: {ctx.author.id}")
-        # print(f"RolesIdAllowed: {ROLE_STAFF}")
-        # print(f"RolesId: {ctx.author.roles}")
-
         # Check if author is owner
         if ctx.message.channel.id not in ALLOWED_CHANNEL:
             if str(ctx.author.id) not in OWNER_IDS:
@@ -610,16 +606,26 @@ class Music(commands.Cog):
                 await ctx.voice_state.songs.put(song)
                 await ctx.send(":headphones: Enqueued {}".format(str(source)))
 
-    # @_join.before_invoke
-    # @_play.before_invoke
-    # async def ensure_voice_state(self, ctx: commands.Context):
+    @_join.before_invoke
+    @_play.before_invoke
+    async def ensure_voice_state(self, ctx: commands.Context):
+        if not ctx.author.voice or not ctx.author.voice.channel:
+            raise commands.CommandError("You are not connected to any voice channel.")
 
-    #     if not ctx.author.voice or not ctx.author.voice.channel:
-    #         raise commands.CommandError("You are not connected to any voice channel.")
+        if (
+            str(ctx.author.id) not in OWNER_IDS
+            and ctx.author.voice.channel not in ALLOWED_VOICE_CHANNEL
+        ):
+            channel_list = ", ".join(
+                f"<#{channel}>" for channel in ALLOWED_VOICE_CHANNEL
+            )
+            raise commands.CommandError(
+                f"You can play a music command in these voice channel {channel_list}."
+            )
 
-    #     if ctx.voice_client:
-    #         if ctx.voice_client.channel != ctx.author.voice.channel:
-    #             raise commands.CommandError("I'm already in a voice channel.")
+        if ctx.voice_client:
+            if ctx.voice_client.channel != ctx.author.voice.channel:
+                raise commands.CommandError("I'm already in a voice channel.")
 
 
 def setup(bot):

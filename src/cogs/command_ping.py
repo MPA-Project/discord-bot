@@ -7,7 +7,7 @@ class Ping(Cog):
         super().__init__()
         self.bot = bot
 
-    @command(name="ping")
+    @command(name="ping", help="It just ping pong return")
     async def ping(self, ctx: Message):
         await ctx.channel.send(f"Pong {ctx.author.mention}!")
 
