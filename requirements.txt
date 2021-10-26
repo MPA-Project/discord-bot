@@ -19,4 +19,4 @@ wheel
 ffmpeg
 cffi
 pillow
-derpibooru
+git+https://github.com/joshua-stone/DerPyBooru
