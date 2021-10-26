@@ -32,7 +32,7 @@ class Pony(Cog):
                             rgb_im = im.convert("RGB")
                             rgb_im.save(f"{filename}.jpg")
 
-                            await ctx.reply(f"Source: {img.url}")
+                            await ctx.reply(f"Source: [Go To]({img.url})")
                             await ctx.send(file=File(f"{filename}.jpg"))
 
                             if os.path.isfile(f"{filename}.jpg"):
