@@ -10,13 +10,17 @@ from discord.ext.commands import command
 from psutil import Process, virtual_memory
 
 from ..db import db
+from src.bot import IS_DEV
 
 
 class Meta(Cog):
     def __init__(self, bot):
         self.bot = bot
 
-        self._message = "playing a bot as mpa assistant"
+        if IS_DEV:
+            self._message = "playing a bot as mpa assistant [DEV]"
+        else:
+            self._message = "playing a bot as mpa assistant"
 
         bot.scheduler.add_job(self.set, CronTrigger(second=0))
 

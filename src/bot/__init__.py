@@ -32,6 +32,11 @@ IGNORE_EXCEPTIONS = (CommandNotFound, BadArgument)
 
 IS_DEV = os.environ.get("MODE_DEV", False)
 
+MAIN_GUILD = 563269331366969345
+LOG_CHANNEL = 563281419888099335
+
+ROLE_STAFF = 563269526360162313
+
 
 def get_prefix(bot, message):
     prefix = db.field("SELECT Prefix FROM guilds WHERE GuildID = ?", message.guild.id)
@@ -119,11 +124,16 @@ class Bot(BotBase):
 
         if ctx.command is not None and ctx.guild is not None:
             if message.author.id in self.banlist:
-                await ctx.send("You are banned from using commands.")
+                await ctx.reply("You are banned from using commands.")
 
             elif not self.ready:
-                await ctx.send(
+                await ctx.reply(
                     "I'm not ready to receive commands. Please wait a few seconds."
+                )
+
+            if IS_DEV and str(ctx.author.id) not in OWNER_IDS:
+                await ctx.reply(
+                    "You are not allowed to run this command during development mode."
                 )
 
             else:
@@ -147,8 +157,8 @@ class Bot(BotBase):
         raise
 
     async def on_command_error(self, ctx, exc):
-        print(f"on_command_error:Ctx: {ctx}")
-        print(f"on_command_error:Exc: {exc}")
+        # print(f"on_command_error:Ctx: {ctx}")
+        # print(f"on_command_error:Exc: {exc}")
         if any([isinstance(exc, error) for error in IGNORE_EXCEPTIONS]):
             pass
 
@@ -180,8 +190,8 @@ class Bot(BotBase):
         print(" on_ready trigger")
         if not self.ready:
             print(" bot not ready")
-            self.guild = self.get_guild(563269331366969345)
-            self.stdout = self.get_channel(563281419888099335)
+            self.guild = self.get_guild(MAIN_GUILD)
+            self.stdout = self.get_channel(LOG_CHANNEL)
             self.scheduler.add_job(
                 self.rules_reminder,
                 CronTrigger(day_of_week=0, hour=12, minute=0, second=0),
