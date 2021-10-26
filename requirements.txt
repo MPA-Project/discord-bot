@@ -19,3 +19,4 @@ wheel
 ffmpeg
 cffi
 pillow
+derpibooru
