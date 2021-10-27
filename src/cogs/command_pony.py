@@ -1,4 +1,4 @@
-from discord.ext.commands import Cog, command
+from discord.ext.commands import Cog, command, CommandError
 from discord import Message, File
 import aiohttp
 import aiofiles
@@ -41,8 +41,7 @@ class Pony(Cog):
                                 os.remove(f"{filename}_temp")
             except Exception as ex:
                 print(f"err {ex}")
-                await ctx.reply(f"Something went wrong, try again leter")
-                pass
+                raise CommandError(f"Something went wrong, try again leter")
 
     @command(name="ponywall", help="Show random pony wallpaper images")
     async def ponywall(self, ctx: Message):
