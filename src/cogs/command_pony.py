@@ -2,10 +2,12 @@ from discord.ext.commands import Cog, command, CommandError
 from discord import Message, File
 import aiohttp
 import aiofiles
-import asyncio
 import os
+import urllib
 from PIL import Image
+import requests
 from derpibooru import Search, sort
+from bs4 import BeautifulSoup
 
 
 class Pony(Cog):
@@ -45,15 +47,58 @@ class Pony(Cog):
 
     @command(name="ponywall", help="Show random pony wallpaper images")
     async def ponywall(self, ctx: Message):
-        # try:
-        #     response = requests.get(
-        #         "https://www.mylittlewallpaper.com/c/my-little-pony/api/v1/random.json?limit=1"
-        #     )
-        #     base_json = response.json()
-        # except:
-        #     pass
+        url = "https://www.mylittlewallpaper.com/c/my-little-pony/api/v1/random.json?limit=1"
 
-        await ctx.reply(f"Still working on progress...")
+        try:
+            response = requests.get(url)
+            base_json = response.json()
+        except Exception as ex:
+            print(f"Error {ex}")
+            raise CommandError(f"Something went wrong, try again leter")
+
+        try:
+            resp = urllib.request.urlopen(base_json["result"][0]["downloadurl"])
+            content = resp.read().decode("utf8")
+        except ValueError as error:
+            print(f"Error {error}")
+            raise CommandError(f"Something went wrong, try again leter")
+
+        try:
+            soup = BeautifulSoup(content, "html.parser")
+            download_button = soup.find("a", {"class": "download button"})
+            download_link = download_button["href"]
+        except Exception as error:
+            print(f"Error {error}")
+            raise CommandError(f"Something went wrong, try again leter")
+
+        try:
+            async with aiohttp.ClientSession() as session:
+                async with session.get(download_link) as resp:
+                    if resp.status != 200:
+                        print(f"resp not 200 {resp}")
+                        pass
+                    else:
+                        filename = f"./temp/pony-wall-{ctx.author.id}"
+                        file = await aiofiles.open(f"{filename}_temp", mode="wb")
+                        await file.write(await resp.read())
+                        await file.close()
+
+                        im = Image.open(f"{filename}_temp")
+                        rgb_im = im.convert("RGB")
+                        rgb_im.save(f"{filename}.jpg")
+
+                        await ctx.reply(
+                            "Source: <{}>".format(base_json["result"][0]["downloadurl"])
+                        )
+                        await ctx.send(file=File(f"{filename}.jpg"))
+
+                        if os.path.isfile(f"{filename}.jpg"):
+                            os.remove(f"{filename}.jpg")
+                        if os.path.isfile(f"{filename}_temp"):
+                            os.remove(f"{filename}_temp")
+        except Exception as ex:
+            print(f"Error {ex}")
+            raise CommandError(f"Something went wrong, try again leter")
 
     @Cog.listener()
     async def on_ready(self):
