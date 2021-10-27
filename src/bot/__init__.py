@@ -23,7 +23,7 @@ from ..db import db
 
 load_dotenv()
 
-OWNER_IDS = [int(os.environ.get("DISCORD_OWNER_ID")), 896618870629089290]
+OWNER_IDS = [int(os.environ.get("DISCORD_OWNER_ID"))]
 COGS = [
     path.replace("./src/cogs/", "").replace(".py", "")
     for path in glob("./src/cogs/*.py")
