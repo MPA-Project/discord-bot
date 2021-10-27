@@ -13,6 +13,7 @@ import re
 import humanize
 import datetime
 from src.bot import ROLE_STAFF, OWNER_IDS
+from utils.universal import roles_in
 
 
 youtube_dl.utils.bug_reports_message = lambda: ""
@@ -336,7 +337,7 @@ class Music(commands.Cog):
 
         # Check if author is owner
         if ctx.message.channel.id not in ALLOWED_CHANNEL:
-            if str(ctx.author.id) not in OWNER_IDS:
+            if ctx.author.id not in OWNER_IDS:
                 channel_list = ",".join(f"<#{channel}>" for channel in ALLOWED_CHANNEL)
                 raise commands.CommandError(
                     f"Music command can be run on channel {channel_list}."
@@ -612,16 +613,16 @@ class Music(commands.Cog):
         if not ctx.author.voice or not ctx.author.voice.channel:
             raise commands.CommandError("You are not connected to any voice channel.")
 
-        if (
-            str(ctx.author.id) not in OWNER_IDS
-            and ctx.author.voice.channel not in ALLOWED_VOICE_CHANNEL
-        ):
-            channel_list = ", ".join(
-                f"<#{channel}>" for channel in ALLOWED_VOICE_CHANNEL
-            )
-            raise commands.CommandError(
-                f"You can play a music command in these voice channel {channel_list}."
-            )
+        if ctx.author.voice.channel.id not in ALLOWED_VOICE_CHANNEL:
+            if ctx.author.id not in OWNER_IDS and not roles_in(
+                ctx.author.roles, ROLE_STAFF
+            ):
+                channel_list = ", ".join(
+                    f"<#{channel}>" for channel in ALLOWED_VOICE_CHANNEL
+                )
+                raise commands.CommandError(
+                    f"You can play a music command in these voice channel {channel_list}."
+                )
 
         if ctx.voice_client:
             if ctx.voice_client.channel != ctx.author.voice.channel:

@@ -17,13 +17,13 @@ from discord.ext.commands import (
     CommandOnCooldown,
     CommandError,
 )
-from discord.ext.commands import when_mentioned_or, command, has_permissions
+from discord.ext.commands import when_mentioned_or
 
 from ..db import db
 
 load_dotenv()
 
-OWNER_IDS = [os.environ.get("DISCORD_OWNER_ID", None)]
+OWNER_IDS = [int(os.environ.get("DISCORD_OWNER_ID")), 896618870629089290]
 COGS = [
     path.replace("./src/cogs/", "").replace(".py", "")
     for path in glob("./src/cogs/*.py")
@@ -131,7 +131,7 @@ class Bot(BotBase):
                     "I'm not ready to receive commands. Please wait a few seconds."
                 )
 
-            if IS_DEV and str(ctx.author.id) not in OWNER_IDS:
+            if IS_DEV and ctx.author.id not in OWNER_IDS:
                 await ctx.reply(
                     "You are not allowed to run this command during development mode."
                 )
