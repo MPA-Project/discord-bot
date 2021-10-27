@@ -4,6 +4,8 @@ from glob import glob
 from dotenv import load_dotenv
 import os
 
+from tzlocal import get_localzone
+
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from apscheduler.triggers.cron import CronTrigger
 from discord import Embed, File, DMChannel, Intents, Message
@@ -63,6 +65,8 @@ class Bot(BotBase):
 
         self.guild = None
         self.scheduler = AsyncIOScheduler()
+        tz = get_localzone()
+        self.scheduler.configure(timezone=tz)
 
         try:
             with open("./data/banlist.txt", "r", encoding="utf-8") as f:

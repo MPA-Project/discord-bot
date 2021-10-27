@@ -20,3 +20,4 @@ ffmpeg
 cffi
 pillow
 git+https://github.com/joshua-stone/DerPyBooru
+tzlocal
