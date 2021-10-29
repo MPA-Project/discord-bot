@@ -19,12 +19,12 @@ class Log(Cog):
 
     @Cog.listener()
     async def on_user_update(self, before: Member, after: Member):
-        if str(after.id) in OWNER_IDS:
+        if after.id in OWNER_IDS:
             return
 
         if before.name != after.name:
             embed = Embed(
-                title="Username change",
+                title=f"Username change by {after.display_name}",
                 colour=after.colour,
                 timestamp=datetime.utcnow(),
             )
@@ -38,7 +38,7 @@ class Log(Cog):
 
         if before.discriminator != after.discriminator:
             embed = Embed(
-                title="Discriminator change",
+                title=f"Discriminator change by {after.display_name}",
                 colour=after.colour,
                 timestamp=datetime.utcnow(),
             )
@@ -56,7 +56,7 @@ class Log(Cog):
         if before.avatar_url != after.avatar_url:
             embed = Embed(
                 title="Avatar change",
-                description="New image is below, old to the right.",
+                description=f"New image is below, old to the right by {after.display_name}.",
                 colour=self.log_channel.guild.get_member(after.id).colour,
                 timestamp=datetime.utcnow(),
             )
@@ -68,7 +68,7 @@ class Log(Cog):
 
     @Cog.listener()
     async def on_member_update(self, before: Member, after: Member):
-        if str(after.id) in OWNER_IDS:
+        if after.id in OWNER_IDS:
             return
 
         if before.display_name != after.display_name:
