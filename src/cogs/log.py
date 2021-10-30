@@ -107,7 +107,7 @@ class Log(Cog):
 
     @Cog.listener()
     async def on_message_edit(self, before: Member, after: Member):
-        if str(before.author.id) in OWNER_IDS:
+        if before.author.id in OWNER_IDS:
             return
 
         if not after.author.bot:
@@ -131,7 +131,7 @@ class Log(Cog):
 
     @Cog.listener()
     async def on_message_delete(self, message: Message):
-        if str(message.author.id) in OWNER_IDS:
+        if message.author.id in OWNER_IDS:
             return
 
         if not message.author.bot:

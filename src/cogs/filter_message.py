@@ -30,7 +30,7 @@ class FilterMessage(Cog):
                 and (datetime.utcnow() - m.created_at).seconds < 60
             )
 
-        print(f"Incoming {message.content}")
+        # print(f"Incoming {message.content}")
 
         if not message.author.bot:
             # pass
@@ -44,28 +44,28 @@ class FilterMessage(Cog):
             #         await sleep(5)
             #         await self.unmute_members(message.guild, [message.author])
 
-            filter_word = ["loli", "lolipop"]
+            filter_word = ["loli"]
             try:
                 pass
-                # if check_filter_words(filter_word, message.content):
-                #     print(f"Detect message of {filter_word}")
-                #     url_pic = choice(fbi_gif)
-                #     print(f"Result random {url_pic}")
-                #     async with aiohttp.ClientSession() as session:
-                #         async with session.get(url_pic) as resp:
-                #             if resp.status != 200:
-                #                 print(f"resp not 200 {resp}")
-                #                 pass
-                #             else:
-                #                 filename = f"./temp/filter-{message.author.id}"
-                #                 file = await aiofiles.open(f"{filename}.gif", mode="wb")
-                #                 await file.write(await resp.read())
-                #                 await file.close()
+                if check_filter_words(filter_word, message.content):
+                    #     print(f"Detect message of {filter_word}")
+                    url_pic = choice(fbi_gif)
+                    # print(f"Result random {url_pic}")
+                    async with aiohttp.ClientSession() as session:
+                        async with session.get(url_pic) as resp:
+                            if resp.status != 200:
+                                print(f"resp not 200 {resp}")
+                                pass
+                            else:
+                                filename = f"./temp/filter-{message.author.id}"
+                                file = await aiofiles.open(f"{filename}.gif", mode="wb")
+                                await file.write(await resp.read())
+                                await file.close()
 
-                #                 await message.channel.send(file=File(f"{filename}.gif"))
+                                await message.reply(":3", file=File(f"{filename}.gif"))
 
-                #                 if os.path.isfile(f"{filename}.gif"):
-                #                     os.remove(f"{filename}.gif")
+                                if os.path.isfile(f"{filename}.gif"):
+                                    os.remove(f"{filename}.gif")
             except:
                 print(f"Err")
 
