@@ -157,7 +157,7 @@ class Bot(BotBase):
         if err == "on_command_error":
             await args[0].send("Something went wrong.")
 
-        await self.stdout.send(f"An error occured. {err}")
+        await self.stdout.send(f"An error occured. {err} {kwargs}")
         raise
 
     async def on_command_error(self, ctx, exc):
