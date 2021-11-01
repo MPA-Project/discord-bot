@@ -34,8 +34,8 @@ class FilterMessage(Cog):
 
         if not message.author.bot:
             # pass
-            if len(list(filter(lambda m: _check(m), self.bot.cached_messages))) >= 3:
-                await message.channel.send("Don't spam mentions!", delete_after=10)
+            # if len(list(filter(lambda m: _check(m), self.bot.cached_messages))) >= 3:
+            #     await message.channel.send("Don't spam mentions!", delete_after=10)
             #     unmutes = await self.mute_members(
             #         message, [message.author], 5, reason="Mention spam"
             #     )
@@ -46,7 +46,6 @@ class FilterMessage(Cog):
 
             filter_word = ["loli"]
             try:
-                pass
                 if check_filter_words(filter_word, message.content):
                     #     print(f"Detect message of {filter_word}")
                     url_pic = choice(fbi_gif)
@@ -66,8 +65,8 @@ class FilterMessage(Cog):
 
                                 if os.path.isfile(f"{filename}.gif"):
                                     os.remove(f"{filename}.gif")
-            except:
-                print(f"Err")
+            except Exception as err:
+                print(f"Err {err}")
 
     @Cog.listener()
     async def on_ready(self):
