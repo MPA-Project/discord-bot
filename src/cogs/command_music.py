@@ -335,14 +335,6 @@ class Music(commands.Cog):
                 "This command can't be used in DM channels."
             )
 
-        # Check if author is owner
-        if ctx.message.channel.id not in ALLOWED_CHANNEL:
-            if ctx.author.id not in OWNER_IDS:
-                channel_list = ",".join(f"<#{channel}>" for channel in ALLOWED_CHANNEL)
-                raise commands.CommandError(
-                    f"Music command can be run on channel {channel_list}."
-                )
-
         return True
 
     async def cog_before_invoke(self, ctx: commands.Context):
@@ -612,6 +604,14 @@ class Music(commands.Cog):
     async def ensure_voice_state(self, ctx: commands.Context):
         if not ctx.author.voice or not ctx.author.voice.channel:
             raise commands.CommandError("You are not connected to any voice channel.")
+
+        # Check if author is owner
+        if ctx.message.channel.id not in ALLOWED_CHANNEL:
+            if ctx.author.id not in OWNER_IDS:
+                channel_list = ",".join(f"<#{channel}>" for channel in ALLOWED_CHANNEL)
+                raise commands.CommandError(
+                    f"This command can be run on channel {channel_list}."
+                )
 
         if ctx.author.voice.channel.id not in ALLOWED_VOICE_CHANNEL:
             if ctx.author.id not in OWNER_IDS and not roles_in(
