@@ -6,7 +6,7 @@ import os
 from discord import File
 
 
-class RickRoll(Cog):
+class Meme(Cog):
     def __init__(self, bot) -> None:
         super().__init__()
         self.bot = bot
@@ -33,8 +33,8 @@ class RickRoll(Cog):
     @Cog.listener()
     async def on_ready(self):
         if not self.bot.ready:
-            self.bot.cogs_ready.ready_up("command_rickroll")
+            self.bot.cogs_ready.ready_up("command_meme")
 
 
 def setup(bot):
-    bot.add_cog(RickRoll(bot))
+    bot.add_cog(Meme(bot))
