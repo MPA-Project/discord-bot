@@ -47,9 +47,7 @@ class FilterMessage(Cog):
             filter_word = ["loli"]
             try:
                 if check_filter_words(filter_word, message.content):
-                    #     print(f"Detect message of {filter_word}")
                     url_pic = choice(fbi_gif)
-                    # print(f"Result random {url_pic}")
                     async with aiohttp.ClientSession() as session:
                         async with session.get(url_pic) as resp:
                             if resp.status != 200:
