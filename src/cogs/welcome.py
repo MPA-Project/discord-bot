@@ -51,14 +51,21 @@ class Welcome(Cog):
                         file = await aiofiles.open(f"{filename}.png", mode="wb")
                         await file.write(await resp.read())
                         await file.close()
-                        await self.bot.get_channel(welcome_channel).send(
-                            f"Welcome to **{member.guild.name}** {member.mention}!",
-                            file=File(f"{filename}.png"),
-                        )
 
-                        if os.path.isfile(f"{filename}.jpg"):
-                            os.remove(f"{filename}.jpg")
+                        if (
+                            os.path.isfile(f"{filename}.png")
+                            and os.path.getsize(f"{filename}.png") > 1250
+                        ):
+                            await self.bot.get_channel(welcome_channel).send(
+                                f"Welcome to **{member.guild.name}** {member.mention}!",
+                                file=File(f"{filename}.png"),
+                            )
 
+                            os.remove(f"{filename}.png")
+                        else:
+                            await self.bot.get_channel(welcome_channel).send(
+                                f"Welcome to **{member.guild.name}** {member.mention}!"
+                            )
                     except Exception:
                         await self.bot.get_channel(welcome_channel).send(
                             f"Welcome to **{member.guild.name}** {member.mention}!"
