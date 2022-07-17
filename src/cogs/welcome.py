@@ -9,6 +9,7 @@ import aiofiles
 from ..db import db
 
 welcome_channel = 896019708724264970
+discord_log_channel = 563281419888099335
 
 
 class Welcome(Cog):
@@ -45,6 +46,9 @@ class Welcome(Cog):
                     await self.bot.get_channel(welcome_channel).send(
                         f"Welcome to **{member.guild.name}** {member.mention}!"
                     )
+                    await self.bot.get_channel(discord_log_channel).send(
+                        f"Welcome to **{member.guild.name}** {member.mention}!"
+                    )
                 else:
                     try:
                         filename = f"./temp/welcome-{member.id}"
@@ -60,14 +64,23 @@ class Welcome(Cog):
                                 f"Welcome to **{member.guild.name}** {member.mention}!",
                                 file=File(f"{filename}.png"),
                             )
+                            await self.bot.get_channel(discord_log_channel).send(
+                                f"Welcome to **{member.guild.name}** {member.mention}!"
+                            )
 
                             os.remove(f"{filename}.png")
                         else:
                             await self.bot.get_channel(welcome_channel).send(
                                 f"Welcome to **{member.guild.name}** {member.mention}!"
                             )
+                            await self.bot.get_channel(discord_log_channel).send(
+                                f"Welcome to **{member.guild.name}** {member.mention}!"
+                            )
                     except Exception:
                         await self.bot.get_channel(welcome_channel).send(
+                            f"Welcome to **{member.guild.name}** {member.mention}!"
+                        )
+                        await self.bot.get_channel(discord_log_channel).send(
                             f"Welcome to **{member.guild.name}** {member.mention}!"
                         )
 
@@ -80,7 +93,7 @@ class Welcome(Cog):
     @Cog.listener()
     async def on_member_remove(self, member: Member):
         db.execute("DELETE FROM exp WHERE UserID = ?", member.id)
-        await self.bot.get_channel(welcome_channel).send(
+        await self.bot.get_channel(discord_log_channel).send(
             f"{member.display_name} has left."
         )
 
