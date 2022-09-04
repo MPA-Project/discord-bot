@@ -6,8 +6,8 @@ import os
 
 from tzlocal import get_localzone
 
-from apscheduler.schedulers.asyncio import AsyncIOScheduler
-from apscheduler.triggers.cron import CronTrigger
+# from apscheduler.schedulers.asyncio import AsyncIOScheduler
+# from apscheduler.triggers.cron import CronTrigger
 from discord import Embed, File, DMChannel, Intents, Message
 from discord.errors import HTTPException, Forbidden
 from discord.ext.commands import Bot as BotBase
@@ -64,7 +64,7 @@ class Bot(BotBase):
         self.cogs_ready = Ready()
 
         self.guild = None
-        self.scheduler = AsyncIOScheduler()
+        # self.scheduler = AsyncIOScheduler()
         # tz = get_localzone()
         # self.scheduler.configure(timezone=tz)
 
@@ -196,11 +196,11 @@ class Bot(BotBase):
             print(" bot not ready")
             self.guild = self.get_guild(MAIN_GUILD)
             self.stdout = self.get_channel(LOG_CHANNEL)
-            self.scheduler.add_job(
-                self.rules_reminder,
-                CronTrigger(day_of_week=0, hour=12, minute=0, second=0),
-            )
-            self.scheduler.start()
+            # self.scheduler.add_job(
+            #     self.rules_reminder,
+            #     CronTrigger(day_of_week=0, hour=12, minute=0, second=0),
+            # )
+            # self.scheduler.start()
 
             self.update_db()
 
