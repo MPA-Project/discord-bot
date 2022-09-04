@@ -65,8 +65,8 @@ class Bot(BotBase):
 
         self.guild = None
         self.scheduler = AsyncIOScheduler()
-        tz = get_localzone()
-        self.scheduler.configure(timezone=tz)
+        # tz = get_localzone()
+        # self.scheduler.configure(timezone=tz)
 
         try:
             with open("./data/banlist.txt", "r", encoding="utf-8") as f:
