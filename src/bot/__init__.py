@@ -74,7 +74,7 @@ class Bot(BotBase):
         except FileNotFoundError:
             self.banlist = []
 
-        db.autosave(self.scheduler)
+        # db.autosave(self.scheduler)
         super().__init__(
             command_prefix=get_prefix, owner_ids=OWNER_IDS, intents=Intents.all()
         )
