@@ -112,11 +112,11 @@ class Bot(BotBase):
 
         db.commit()
 
-    def run(self, version):
+    async def run(self, version):
         self.VERSION = version
 
         print("running setup...")
-        self.setup()
+        await self.setup()
 
         self.TOKEN = os.environ.get("DISCORD_TOKEN", None)
 
