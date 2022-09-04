@@ -64,9 +64,9 @@ class Bot(BotBase):
         self.cogs_ready = Ready()
 
         self.guild = None
-        # self.scheduler = AsyncIOScheduler()
-        # tz = get_localzone()
-        # self.scheduler.configure(timezone=tz)
+        self.scheduler = AsyncIOScheduler()
+        tz = get_localzone()
+        self.scheduler.configure(timezone=tz)
 
         try:
             with open("./data/banlist.txt", "r", encoding="utf-8") as f:
@@ -74,18 +74,18 @@ class Bot(BotBase):
         except FileNotFoundError:
             self.banlist = []
 
-        # db.autosave(self.scheduler)
+        db.autosave(self.scheduler)
         super().__init__(
             command_prefix=get_prefix, owner_ids=OWNER_IDS, intents=Intents.all()
         )
 
-    def setup(self):
+    async def setup(self):
         print("cog setup")
         print(f" cog list {COGS}")
         for cog in COGS:
             # valid_cog = cog.replace('./src/cogs/', '')
             print(f" trying load {cog} cog")
-            self.load_extension(f"src.cogs.{cog}")
+            await self.load_extension(f"src.cogs.{cog}")
             print(f" {cog} cog loaded")
 
         print("setup complete")
