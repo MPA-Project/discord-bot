@@ -6,8 +6,8 @@ import os
 
 from tzlocal import get_localzone
 
-from apscheduler.schedulers.asyncio import AsyncIOScheduler
-from apscheduler.triggers.cron import CronTrigger
+# from apscheduler.schedulers.asyncio import AsyncIOScheduler
+# from apscheduler.triggers.cron import CronTrigger
 from discord import Embed, File, DMChannel, Intents, Message
 from discord.errors import HTTPException, Forbidden
 from discord.ext.commands import Bot as BotBase
@@ -64,9 +64,9 @@ class Bot(BotBase):
         self.cogs_ready = Ready()
 
         self.guild = None
-        self.scheduler = AsyncIOScheduler()
-        tz = get_localzone()
-        self.scheduler.configure(timezone=tz)
+        # self.scheduler = AsyncIOScheduler()
+        # tz = get_localzone()
+        # self.scheduler.configure(timezone=tz)
 
         try:
             with open("./data/banlist.txt", "r", encoding="utf-8") as f:
@@ -74,18 +74,18 @@ class Bot(BotBase):
         except FileNotFoundError:
             self.banlist = []
 
-        db.autosave(self.scheduler)
+        # db.autosave(self.scheduler)
         super().__init__(
             command_prefix=get_prefix, owner_ids=OWNER_IDS, intents=Intents.all()
         )
 
-    async def setup(self):
+    def setup(self):
         print("cog setup")
         print(f" cog list {COGS}")
         for cog in COGS:
             # valid_cog = cog.replace('./src/cogs/', '')
             print(f" trying load {cog} cog")
-            await self.load_extension(f"src.cogs.{cog}")
+            self.load_extension(f"src.cogs.{cog}")
             print(f" {cog} cog loaded")
 
         print("setup complete")
@@ -112,11 +112,11 @@ class Bot(BotBase):
 
         db.commit()
 
-    async def run(self, version):
+    def run(self, version):
         self.VERSION = version
 
         print("running setup...")
-        await self.setup()
+        self.setup()
 
         self.TOKEN = os.environ.get("DISCORD_TOKEN", None)
 
@@ -222,7 +222,7 @@ class Bot(BotBase):
 
             # await channel.send(file=File("./data/images/profile.png"))
 
-            print(" bot setup cog")
+            print(" bot setup update_db")
             while not self.cogs_ready.all_ready():
                 await sleep(0.5)
 

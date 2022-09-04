@@ -1,5 +1,5 @@
-discord
-discord.py[voice]
+discord==1.7.3
+discord.py[voice]==1.7.3
 requests
 markdown
 dnspython
