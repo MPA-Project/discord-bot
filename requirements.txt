@@ -20,5 +20,5 @@ ffmpeg
 cffi
 pillow
 git+https://github.com/joshua-stone/DerPyBooru
-tzlocal
+tzlocal==2.1
 beautifulsoup4
