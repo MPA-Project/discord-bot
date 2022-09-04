@@ -194,7 +194,11 @@ class Bot(BotBase):
         print(" on_ready trigger")
         if not self.ready:
             print(" bot not ready")
+
+            print(" bot setup guild")
             self.guild = self.get_guild(MAIN_GUILD)
+
+            print(" bot setup stdout")
             self.stdout = self.get_channel(LOG_CHANNEL)
             # self.scheduler.add_job(
             #     self.rules_reminder,
@@ -202,6 +206,7 @@ class Bot(BotBase):
             # )
             # self.scheduler.start()
 
+            print(" bot setup update_db")
             self.update_db()
 
             # embed = Embed(title="Now online!", description="Carberretta is now online.",
@@ -217,6 +222,7 @@ class Bot(BotBase):
 
             # await channel.send(file=File("./data/images/profile.png"))
 
+            print(" bot setup cog")
             while not self.cogs_ready.all_ready():
                 await sleep(0.5)
 
